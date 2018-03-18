@@ -1,0 +1,10 @@
+rails _5.0.6_ new kadai-tasklist --database=mysql  --skip-test
+
+rails g model Task content:string
+
+ec2-user:~/environment/kadai-tasklist (master) $ rails db:create
+Created database 'kadai-tasklist_development'
+Created database 'kadai-tasklist_test'
+
+
+tableはtasks
