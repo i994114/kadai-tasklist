@@ -8,3 +8,7 @@ Created database 'kadai-tasklist_test'
 
 
 tableはtasks
+
+rails g controller Tasks --no-helper --no-assets
+
+
