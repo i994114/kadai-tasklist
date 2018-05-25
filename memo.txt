@@ -12,3 +12,12 @@ tableはtasks
 rails g controller Tasks --no-helper --no-assets
 
 
+
+
+rails g model User name:string email:string password_digest:string
+
+ rails g controller toppages index
+ 
+ rails g controller sessions new create destory
+ 
+ rails g migration AddUserToTasks user:references

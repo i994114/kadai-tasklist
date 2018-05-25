@@ -1,7 +1,16 @@
 class TasksController < ApplicationController
   before_action :set_task,only: [:show, :edit, :update, :destroy]
+  before_action :require_user_logged_in  #Twitter課題の追加箇所
+  before_action :correct_user, only: [:destroy] #Twitter課題の追加箇所
+  
   def index
-    @tasks = Task.order(created_at: :desc).page(params[:page]).per(10)
+    #@tasks = Task.order(created_at: :desc).page(params[:page]).per(10)
+    #下記をＴｗｉｔｔｅｒの課題で追加
+    if logged_in?
+      @user=current_user
+      @task=current_user.tasks.build
+      @tasks = current_user.tasks.order('created_at DESC').page(params[:page])
+    end
   end
   
   def show
@@ -12,6 +21,16 @@ class TasksController < ApplicationController
   end
   
   def create
+    @task = current_user.tasks.build(task_params)
+    if @task.save
+      flash[:success] = 'タスクが正常に登録されました'
+      redirect_to root_url
+      
+    else
+      @tasks = current_user.tasks.order('created_at DESC').page(params[:page])
+      flash.now[:danger] = 'タスクを登録できませんでした'
+      render 'toppages/index'
+=begin
     @task = Task.new(task_params)
     
     if @task.save
@@ -20,7 +39,9 @@ class TasksController < ApplicationController
     else
       flash.now[:danger] = 'タスクを登録できませんでした'
       render :new
+=end
     end
+
     
   end
   
@@ -41,6 +62,7 @@ class TasksController < ApplicationController
     @task.destroy
     
     flash[:success] = 'Taskは正常に削除されました'
+    #redirect_back(fallback_location: root_path)
     redirect_to tasks_url
   end
   
@@ -53,5 +75,12 @@ class TasksController < ApplicationController
   #Strong Parameter
   def task_params
     params.require(:task).permit(:content, :status)
+  end
+  
+  def correct_user
+    @task = current_user.tasks.find_by(id: params[:id])
+    unless @task
+      redirect_to root_url
+    end
   end
 end
