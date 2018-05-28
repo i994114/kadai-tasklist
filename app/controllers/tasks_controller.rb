@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
-  before_action :set_task,only: [:show, :edit, :update, :destroy]
+  #before_action :set_task,only: [:show, :edit, :update, :destroy]
   before_action :require_user_logged_in  #Twitter課題の追加箇所
-  before_action :correct_user, only: [:destroy,:show] #Twitter課題の追加箇所
+  before_action :correct_user, only: [:destroy,:show,:update, :edit] #Twitter課題の追加箇所
   
   def index
     #@tasks = Task.order(created_at: :desc).page(params[:page]).per(10)
@@ -67,11 +67,12 @@ class TasksController < ApplicationController
   end
   
   private
-  
+=begin
   def set_task
     @task = Task.find(params[:id])
   end
-  
+=end
+
   #Strong Parameter
   def task_params
     params.require(:task).permit(:content, :status)
